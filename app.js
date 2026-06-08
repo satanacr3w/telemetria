@@ -47,45 +47,39 @@ async function carregarDados(){
 
 function preencherListaCarros(dados){
 
- const select =
-   document.getElementById('filtroCarro');
+ const select = document.getElementById('filtroCarro');
 
- if(!select) return;
-
- if(select.options.length > 0)
+ if(!select) {
+   console.error("Select filtroCarro não encontrado");
    return;
+ }
 
  const carros =
-   [...new Set(
-     dados.map(x => x.carro)
-   )].sort((a,b)=>a-b);
+   [...new Set(dados.map(item => Number(item.carro)))]
+   .filter(c => !isNaN(c))
+   .sort((a,b)=>a-b);
+
+ console.log("Carros:", carros);
+
+ select.innerHTML = '';
 
  carros.forEach(carro => {
 
-   const option =
-     document.createElement('option');
+   const option = document.createElement('option');
 
    option.value = carro;
+   option.textContent = `Carro ${carro}`;
 
-   option.textContent =
-     'Carro ' + carro;
-
-   if(carro == 331)
-     option.selected = true;
+   if(carro === carroSelecionado)
+      option.selected = true;
 
    select.appendChild(option);
  });
 
- select.addEventListener(
-   'change',
-   function(){
-
-     carroSelecionado =
-       Number(this.value);
-
-     carregarDados();
-   }
- );
+ select.onchange = function(){
+   carroSelecionado = Number(this.value);
+   carregarDados();
+ };
 }
 
 function atualizarGraficos(dadosCarro){
