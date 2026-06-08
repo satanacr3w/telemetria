@@ -5,12 +5,12 @@ let graficoTemp;
 let graficoAmb;
 
 async function carregarDados(){
- const resposta=await fetch(
+const resposta = await fetch(
  `${SUPABASE_URL}/rest/v1/telemetria?select=*&order=created_at.desc&limit=100`,
  {
    headers:{
-     apikey:API_KEY,
-     Authorization:`Bearer ${API_KEY}`
+     apikey: API_KEY,
+     Authorization: `Bearer ${API_KEY}`
    }
  });
  const dados=await resposta.json();
