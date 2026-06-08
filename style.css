@@ -9,7 +9,7 @@ table{width:100%;border-collapse:collapse;}
 th,td{padding:10px;border-bottom:1px solid #ddd;text-align:center;}
 th{background:#ececec;}
 #filtroCarro{
-    width: 200px;
+    width: 300px;
     height: 70px;
     font-size: 30px;
     padding: 8px;
