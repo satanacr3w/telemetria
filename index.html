@@ -4,43 +4,87 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel Telemetria</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-<header><h1>Monitoramento Transporte Asa branca</h1></header>
+
+<header>
+    <h1>Monitoramento Asa Branca</h1>
+</header>
 
 <div class="cards">
-<div class="card"><h3>Temperatura Atual</h3><span id="tempAtual">--</span></div>
-<div class="card"><h3>Temperatura Ambiente</h3><span id="umidAtual">--</span></div>
-<div class="card"><h3>Última Atualização</h3><span id="ultimaAtualizacao">--</span></div>
+
+    <div class="card">
+        <h3>Temperatura Atual</h3>
+        <span id="tempAtual">--</span>
+    </div>
+
+    <div class="card">
+        <h3>Temperatura Ambiente</h3>
+        <span id="umidAtual">--</span>
+    </div>
+
+    <div class="card">
+        <h3>Última Atualização</h3>
+        <span id="ultimaAtualizacao">--</span>
+    </div>
+
 </div>
 
 <div class="grafico">
-<h2>Temperatura Carro 331</h2>
-<canvas id="graficoTemperatura"></canvas>
+
+    <h2>Selecionar Carro</h2>
+
+    <select id="filtroCarro">
+    </select>
+
 </div>
 
 <div class="grafico">
-<h2>Temperatura Ambiente</h2>
-<canvas id="graficoUmidade"></canvas>
+
+    <h2 id="tituloGrafico">
+        Temperatura do Carro
+    </h2>
+
+    <canvas id="graficoTemperatura"></canvas>
+
+</div>
+
+<div class="grafico">
+
+    <h2>Temperatura Ambiente</h2>
+
+    <canvas id="graficoUmidade"></canvas>
+
 </div>
 
 <div class="tabela">
-<h2>Últimas Leituras</h2>
-<table>
-<thead>
-<tr>
-<th>Data</th>
-<th>Carro</th>
-<th>Temperatura</th>
-<th>Ambiente</th>
-</tr>
-</thead>
-<tbody id="tabelaDados"></tbody>
-</table>
+
+    <h2>Últimas Leituras</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Carro</th>
+                <th>Temperatura</th>
+                <th>Ambiente</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabelaDados">
+        </tbody>
+
+    </table>
+
 </div>
 
 <script src="app.js"></script>
+
 </body>
 </html>
