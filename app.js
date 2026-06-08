@@ -1,4 +1,4 @@
-const SUPABASE_URL='https://nawpanccwslcdbtmfsgn.supabase.co/rest/v1/telemetria';
+const SUPABASE_URL='https://nawpanccwslcdbtmfsgn.supabase.co';
 const API_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hd3BhbmNjd3NsY2RidG1mc2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1Mzg4NDcsImV4cCI6MjA5NjExNDg0N30.YEu0hyuKEQuwp9KPT33B8VE9wdTvqlF7qvNvk8ujPE4';
 
 let graficoTemp;
