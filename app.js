@@ -3,63 +3,190 @@ const API_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJl
 
 let graficoTemp;
 let graficoAmb;
+let carroSelecionado = 331;
 
 async function carregarDados(){
-const resposta = await fetch(
- `${SUPABASE_URL}/rest/v1/telemetria?select=*&order=created_at.desc&limit=100`,
+
+ const resposta = await fetch(
+ `${SUPABASE_URL}/rest/v1/telemetria?select=*&order=created_at.desc&limit=500`,
  {
    headers:{
      apikey: API_KEY,
      Authorization: `Bearer ${API_KEY}`
    }
  });
- const dados=await resposta.json();
+
+ const dados = await resposta.json();
+
  if(!dados.length) return;
 
- const sensor331=dados.filter(x=>x.carro==331);
+ preencherListaCarros(dados);
 
- if(sensor331.length){
-   document.getElementById('tempAtual').innerText=sensor331[0].temperatura+' °C';
-   document.getElementById('umidAtual').innerText=sensor331[0].umidade+' °C';
-   document.getElementById('ultimaAtualizacao').innerText=
-      new Date(sensor331[0].created_at).toLocaleString('pt-BR');
+ const dadosCarro =
+   dados.filter(
+     x => x.carro == carroSelecionado
+   );
+
+ if(dadosCarro.length){
+
+   document.getElementById('tempAtual').innerText =
+     Number(dadosCarro[0].temperatura).toFixed(1) + ' °C';
+
+   document.getElementById('umidAtual').innerText =
+     Number(dadosCarro[0].umidade).toFixed(1) + ' °C';
+
+   document.getElementById('ultimaAtualizacao').innerText =
+     new Date(
+       dadosCarro[0].created_at
+     ).toLocaleString('pt-BR');
  }
 
- atualizarGraficos(sensor331);
+ atualizarGraficos(dadosCarro);
  atualizarTabela(dados);
 }
 
-function atualizarGraficos(sensor331){
- const dadosOrdenados=[...sensor331].reverse();
- const labels=dadosOrdenados.map(x=>new Date(x.created_at).toLocaleTimeString('pt-BR'));
- const temperaturas=dadosOrdenados.map(x=>x.temperatura);
- const ambiente=dadosOrdenados.map(x=>x.umidade);
+function preencherListaCarros(dados){
 
- if(graficoTemp) graficoTemp.destroy();
- graficoTemp=new Chart(document.getElementById('graficoTemperatura'),{
-   type:'line',
-   data:{labels,datasets:[{label:'Temperatura',data:temperaturas}]}
+ const select =
+   document.getElementById('filtroCarro');
+
+ if(!select) return;
+
+ if(select.options.length > 0)
+   return;
+
+ const carros =
+   [...new Set(
+     dados.map(x => x.carro)
+   )].sort((a,b)=>a-b);
+
+ carros.forEach(carro => {
+
+   const option =
+     document.createElement('option');
+
+   option.value = carro;
+
+   option.textContent =
+     'Carro ' + carro;
+
+   if(carro == 331)
+     option.selected = true;
+
+   select.appendChild(option);
  });
 
- if(graficoAmb) graficoAmb.destroy();
- graficoAmb=new Chart(document.getElementById('graficoUmidade'),{
-   type:'line',
-   data:{labels,datasets:[{label:'Ambiente',data:ambiente}]}
- });
+ select.addEventListener(
+   'change',
+   function(){
+
+     carroSelecionado =
+       Number(this.value);
+
+     carregarDados();
+   }
+ );
+}
+
+function atualizarGraficos(dadosCarro){
+
+ const dadosOrdenados =
+   [...dadosCarro].reverse();
+
+ const labels =
+   dadosOrdenados.map(
+     x => new Date(
+       x.created_at
+     ).toLocaleTimeString('pt-BR')
+   );
+
+ const temperaturas =
+   dadosOrdenados.map(
+     x => x.temperatura
+   );
+
+ const ambiente =
+   dadosOrdenados.map(
+     x => x.umidade
+   );
+
+ if(graficoTemp)
+   graficoTemp.destroy();
+
+ graficoTemp =
+   new Chart(
+     document.getElementById(
+       'graficoTemperatura'
+     ),
+     {
+       type:'line',
+
+       data:{
+         labels,
+
+         datasets:[
+         {
+           label:
+           `Carro ${carroSelecionado}`,
+
+           data:
+           temperaturas
+         }]
+       }
+     }
+   );
+
+ if(graficoAmb)
+   graficoAmb.destroy();
+
+ graficoAmb =
+   new Chart(
+     document.getElementById(
+       'graficoUmidade'
+     ),
+     {
+       type:'line',
+
+       data:{
+         labels,
+
+         datasets:[
+         {
+           label:
+           'Temperatura Ambiente',
+
+           data:
+           ambiente
+         }]
+       }
+     }
+   );
 }
 
 function atualizarTabela(dados){
+
  let html='';
+
  dados.slice(0,20).forEach(item=>{
-   html+=`<tr>
+
+   html += `
+   <tr>
    <td>${new Date(item.created_at).toLocaleString('pt-BR')}</td>
    <td>${item.carro}</td>
    <td>${item.temperatura}</td>
    <td>${item.umidade}</td>
-   </tr>`;
+   </tr>
+   `;
  });
- document.getElementById('tabelaDados').innerHTML=html;
+
+ document.getElementById(
+   'tabelaDados'
+ ).innerHTML = html;
 }
 
 carregarDados();
-setInterval(carregarDados,5000);
+
+setInterval(
+  carregarDados,
+  5000
+);
