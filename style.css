@@ -8,3 +8,12 @@ header{margin-bottom:20px;}
 table{width:100%;border-collapse:collapse;}
 th,td{padding:10px;border-bottom:1px solid #ddd;text-align:center;}
 th{background:#ececec;}
+#filtroCarro{
+    width: 300px;
+    height: 50px;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
